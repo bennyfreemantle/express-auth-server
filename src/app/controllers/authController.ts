@@ -11,16 +11,18 @@ export const register = async (req: Request, res: Response) => {
         // TODO: send email verification link
         // TODO: send welcome email
 
-        const token = generateJwtToken(user.id);
+        const payload = {
+            id: user.id,
+            email: user.email,
+            username: user.username
+        }
+
+        const token = generateJwtToken(payload);
 
         res.status(201).json({
             success: true,
             message: 'User Registered successfully',
-            user: {
-                id: user.id,
-                email: user.email,
-                username: user.username
-            },
+            payload,
             token
         });
     } catch (error) {
@@ -51,16 +53,18 @@ export const login = async (req: Request, res: Response) => {
     try {
         const user = await loginUser(username, password);
 
-        const token = generateJwtToken(user.id);
+        const payload = {
+            id: user.id,
+            email: user.email,
+            username: user.username
+        }
+
+        const token = generateJwtToken(payload);
 
         res.status(200).json({
             success: true,
             message: 'Login successfully',
-            user: {
-                id: user.id,
-                email: user.email,
-                username: user.username
-            },
+            payload,
             token
         });
     } catch (error) {
